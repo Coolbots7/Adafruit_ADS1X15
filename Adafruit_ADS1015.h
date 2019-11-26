@@ -18,12 +18,7 @@
 */
 /**************************************************************************/
 
-#if ARDUINO >= 100
- #include "Arduino.h"
-#else
- #include "WProgram.h"
-#endif
-
+#include "Arduino.h"
 #include <Wire.h>
 
 /*=========================================================================
@@ -121,14 +116,18 @@ class Adafruit_ADS1015
 {
 protected:
    // Instance-specific properties
+  TwoWire *_i2c;
+
    uint8_t   m_i2cAddress;
    uint8_t   m_conversionDelay;
    uint8_t   m_bitShift;
    adsGain_t m_gain;
+   void writeRegister(uint8_t reg, uint16_t value);
+   uint16_t readRegister(uint8_t reg);
 
  public:
   Adafruit_ADS1015(uint8_t i2cAddress = ADS1015_ADDRESS);
-  void begin(void);
+  void begin(TwoWire *theWire = &Wire);
   uint16_t  readADC_SingleEnded(uint8_t channel);
   int16_t   readADC_Differential_0_1(void);
   int16_t   readADC_Differential_2_3(void);
